@@ -13,12 +13,11 @@ exec R --quiet --no-save "${@}"
 export R_VERSION=3.6.2
 
 # Get dependencies
-apt-get update
-apt-get install -yqq --no-install-recommends \
-        locales \
-        gnupg \
-        curl \
-        build-essential
+        apt-get update
+        DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+            locales \
+            gnupg \
+            build-essential
 
 # Configure default locale
         echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
@@ -46,21 +45,12 @@ apt-get install -yqq --no-install-recommends \
            libgeos-dev \
            libgeos++-dev \
 
-
-# Add a default CRAN mirror
+# Add a default CRAN mirror JIC
             echo "options(repos = c(CRAN = 'https://cran.rstudio.com/'), download.file.method = 'libcurl')" >> /usr/lib/R/etc/Rprofile.site
 
-# Add a directory for host R libraries
-#            mkdir -p /library
-#            echo "R_LIBS_SITE=/library:\${R_LIBS_SITE}" >> /usr/lib/R/etc/Renviron.site
-
-# install renv package
-      R --quiet -e "install.packages('renv', repos = 'https://cran.rstudio.com')"
-
 # install aws-cli
-      curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-      unzip awscli-bundle.zip
-      ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+      DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends python-pip3
+      pip3 install awscli --upgrade
 
 # Clean up
             rm -rf /var/lib/apt/lists/*

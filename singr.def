@@ -3,7 +3,7 @@ From: ubuntu:18.04
 
 %labels
     Author cole.brokamp@gmail.com
-    R_Version 3.6.2
+    R_VERSION 3.6.2
 
 %runscript
 exec R --quiet --no-save "${@}"

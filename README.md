@@ -2,9 +2,14 @@
 
 A singularity image including:
 
-- R version 3.6.2
+- R
 - geospatial system deps gdal and geos
 - aws cli
+
+Versions of R are specified using the singularity image tags, where:
+
+- `3.6` refers to R Version `3.6.*` (e.g., 3.6.2 or 3.6.3, etc...)
+- `latest` refers to the most recently pushed image
 
 ## using with an R package on the CCHMC HPC
 
@@ -19,33 +24,27 @@ A singularity image including:
 - make sure the `.sif` file is present in home folder
     - either copy from a build of https://github.com/cole-brokamp/singr
     - or pull the latest version from singularity hub with `singularity pull library://cole-brokamp/default/singr`
-    - or pull a specific version of R from singularity hub with `singularity pull library://cole-brokamp/default/singr:3.6.2`
+    - or pull a specific version of R from singularity hub with `singularity pull library://cole-brokamp/default/singr:3.6`
 - note that the name of the downloaded `.sif` file will be different depending on which method used above; we will use the file name `singr_latest.sif` assuming that the latest version was pulled from singularity hub
 - setup any system environment variables if needed (e.g., `AWS_SECRET_ACCESS_KEY`)
 
 #### start an interactive R session
 
-change to the project directory and run:
+Optionally, start a `tmux` or `screen` session from the HPC login node to keep your session persistently alive
+
+Turn on the proxy so that the image can download and install R packages (`proxy_on` will prompt for CCHMC username and password)
+
+Change to the project directory and run:
 
 ```sh
-# request interactive job:
-bsub -Is -W 10:00 -n 16 -M 250000 -R "span[ptile=16]" /bin/bash
-
-# optional: use tmux to create a detachable prompt
-
-# turn on internet by interactively entering cchmc username and password with:
-proxy_on
-
-# start singularity image by calling the container as if it were an executable
-module load singularity/3.1.0
-~/singr_latest.sif
+bsub -Is -W 10:00 -n 16 -M 250000 -R "span[ptile=16]" "module load singularity; singularity run ~/singr_latest.sif"
 ```
 
-this will open up an interactive R prompt and automatically install the necessary version of `renv`
+This works by supplying the commands needed to run the singularity container and will drop you right into an interactive R prompt and automatically install the necessary version of `renv`
 
-next, bootstrap the library as defined in the lockfile by running `renv::restore()` within R
+Next, bootstrap the library as defined in the lockfile by running `renv::restore()` within R
 
-check resources available to R with:
+Double check resources available to R with:
 
 ```R
 parallel::detectCores()
@@ -53,7 +52,11 @@ benchmarkme::get_ram()
 benchmarkme::get_cup()
 ```
 
+If you need access to a shell within the singularity container, run `singularity shell ~singr_latest.sif` instead of calling the container as an executable.
+
 #### run a batch R job
+
+use `lshosts` to see an overview of available compute nodes and their specs
 
 ...
 

@@ -11,13 +11,15 @@ exec R --quiet --no-save "${@}"
 %post
 export R_VERSION=3.6
 
-# install dependencies
+# install some build dependencies
     apt-get update
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
       locales \
       gnupg \
       build-essential \
-      gfortran
+      gfortran \
+      git \
+      cmake
 
 # configure default locale
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
@@ -38,13 +40,24 @@ export R_VERSION=3.6
       libcairo2-dev \
       libxt-dev
 
+# install h3 library
+    git clone https://github.com/uber/h3.git h3c
+    cd h3c
+    git pull origin master --tags
+    git checkout "v3.3.0"
+    cmake -DENABLE_FORMAT=OFF -DBUILD_SHARED_LIBS=ON .
+    make install
+    cd ..
+    rm -rf h3c
+
 # install geospatial system deps
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
       libgdal-dev \
       gdal-bin \
       libgeos-dev \
       libgeos++-dev \
-      libproj-dev
+      libproj-dev \
+      libudunits2-dev
 
 # add a default CRAN mirror JIC
     echo "options(repos = c(CRAN = 'https://cran.rstudio.com/'), download.file.method = 'libcurl')" >> /usr/lib/R/etc/Rprofile.site

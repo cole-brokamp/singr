@@ -3,20 +3,21 @@ From: ubuntu:18.04
 
 %labels
     Author cole.brokamp@gmail.com
-    R_VERSION 3.6.2
+    R_VERSION 3.6
 
 %runscript
 exec R --quiet --no-save "${@}"
 
 %post
-export R_VERSION=3.6.2
+export R_VERSION=3.6
 
 # install dependencies
     apt-get update
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
       locales \
       gnupg \
-      build-essential
+      build-essential \
+      gfortran
 
 # configure default locale
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen

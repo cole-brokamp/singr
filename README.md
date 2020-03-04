@@ -3,7 +3,7 @@
 A singularity image including:
 
 - R
-- geospatial system deps gdal and geos
+- geospatial system deps gdal, geos, and proj
 - aws cli
 
 Versions of R are specified using the singularity image tags, where:

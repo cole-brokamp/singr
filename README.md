@@ -4,6 +4,7 @@ A singularity image including:
 
 - R
 - geospatial system deps gdal, geos, and proj
+- uber's h3 library
 - aws cli
 
 Versions of R are specified using the singularity image tags, where:

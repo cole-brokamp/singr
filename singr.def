@@ -1,15 +1,15 @@
 BootStrap: docker
-From: ubuntu:18.04
+From: ubuntu:20.04
 
 %labels
     Author cole.brokamp@gmail.com
-    R_VERSION 3.6
+    R_VERSION 4.0
 
 %runscript
 exec R --quiet --no-save "${@}"
 
 %post
-export R_VERSION=3.6
+export R_VERSION=4.0
 
 # install some build dependencies
     apt-get update
@@ -29,7 +29,7 @@ export R_VERSION=3.6
     export LANG=en_US.UTF-8
 
 # install R
-    echo "deb http://cran.r-project.org/bin/linux/ubuntu bionic-cran35/" > /etc/apt/sources.list.d/r.list
+    echo "deb http://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/r.list
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
     apt-get update
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \

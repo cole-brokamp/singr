@@ -1,5 +1,5 @@
 NAME=singr
-R_VERSION=3.6
+R_VERSION=4.0
 
 .PHONY: build push
 

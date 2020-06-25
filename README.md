@@ -7,10 +7,12 @@ A singularity image including:
 - uber's h3 library
 - aws cli
 
-Versions of R are specified using the singularity image tags, where:
+Versions of R are specified using the singularity image tags and GitHub releases, where:
 
-- `3.6` refers to R Version `3.6.*` (e.g., 3.6.2 or 3.6.3, etc...)
+- `4.0` refers to R Version `4.0.*` (e.g., 4.0.0 or 4.0.1, etc...)
 - `latest` refers to the most recently pushed image
+
+Note that different versions may use different base images for the Singularity container (e.g. `3.6` uses Ubuntu 18.04, but `4.0` uses Ubuntu 20.04).
 
 ## using with an R package on the CCHMC HPC
 
@@ -22,18 +24,17 @@ Versions of R are specified using the singularity image tags, where:
     - making sure that an `renv` project is present is important! without it, the R process in the container will try to use the host R package library (`.libPaths()`) and will cause all kinds of problems
     - an advantage of this is that the project library compiled specifically for the container OS will be stored locally, meaning that the packages will be already installed the next time the container is used
     - sidenote: if you want to run the container without an `renv` project setup, just setup an empty project first by running `renv::init()` from R on the host
-- make sure the `.sif` file is present in home folder
-    - either copy from a build of https://github.com/cole-brokamp/singr
-    - or pull the latest version from singularity hub with `singularity pull library://cole-brokamp/default/singr`
-    - or pull a specific version of R from singularity hub with `singularity pull library://cole-brokamp/default/singr:3.6`
-- note that the name of the downloaded `.sif` file will be different depending on which method used above; we will use the file name `singr_latest.sif` assuming that the latest version was pulled from singularity hub
+- pull the the `.sif` file into your home folder (changing the tag number for a different version of R) with:
+    - `singularity pull library://cole-brokamp/default/singr:4.0`
+    - note that you can also use `latest` as the tag to get the most recent version
+    - note that the name of the downloaded `.sif` file will be different depending on which tag was requested; we will use the file name `singr_latest.sif` assuming that the latest version was pulled from singularity hub
 - setup any system environment variables if needed (e.g., `AWS_SECRET_ACCESS_KEY`)
 
 #### start an interactive R session
 
 Optionally, start a `tmux` or `screen` session from the HPC login node to keep your session persistently alive
 
-Turn on the proxy so that the image can download and install R packages (`proxy_on` will prompt for CCHMC username and password)
+Turn on the proxy so that the image can download and install R packages (`proxy_on` will prompt for CCHMC username and password). Note that as of June 2020, this is no longer required (and may in fact cause issues) because of changes IS implemented regarding how the HPC connects to the internet.
 
 Change to the project directory and run:
 
@@ -55,14 +56,8 @@ benchmarkme::get_cup()
 
 If you need access to a shell within the singularity container, run `singularity shell ~singr_latest.sif` instead of calling the container as an executable.
 
-#### run a batch R job
-
-use `lshosts` to see an overview of available compute nodes and their specs
-
-...
-
-## notes
-
+## notes 
+- use `lshosts` to see an overview of available compute nodes and their specs
 - tmux works from login node to attach to session started on a compute node (leave your job and come back later without having to find the ip address of the compute node)
 - singularity imports all system environment variables (github/aws keys, etc)
 - singularity automatically mounts `$HOME`, `$PWD`, and `/tmp`

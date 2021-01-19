@@ -8,17 +8,8 @@ From: ubuntu:20.04
 %runscript
 exec R --quiet --no-save "${@}"
 
-$environment
-export R_VERSION=4.0
-export R_HOME=/usr/local/lib/R
-
 %post
-mkdir --parents ${R_HOME}/etc
-
-# add RSPM repo for linux binaries
-export CRAN="https://packagemanager.rstudio.com/all/__linux__/focal/latest"
-echo "options(repos = c(CRAN = '${CRAN}'), download.file.method = 'libcurl')" >> ${R_HOME}/etc/Rprofile.site
-# this does not work when running on the host, but can still do it manually at runtime or add to Rprofile
+export R_VERSION=4.0
 
 # install some build dependencies and other essentials
     apt-get update

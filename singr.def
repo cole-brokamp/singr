@@ -3,13 +3,13 @@ From: ubuntu:20.04
 
 %labels
     Author cole.brokamp@gmail.com
-    R_VERSION 4.0
+    R_VERSION 4.1
 
 %runscript
 exec R --quiet --no-save "${@}"
 
 %post
-export R_VERSION=4.0
+export R_VERSION=4.1
 
 # install some build dependencies and other essentials
     apt-get update
@@ -67,6 +67,10 @@ export R_VERSION=4.0
         python3-pip \
         python3-setuptools
     pip3 install awscli --upgrade
+
+# V8 deps
+    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
+      libnode-dev \
 
 # clean up
     rm -rf /var/lib/apt/lists/*

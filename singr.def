@@ -19,6 +19,7 @@ export R_VERSION=4.1
       build-essential \
       gfortran \
       git \
+      libgit2-dev \
       cmake \
       curl \
       wget

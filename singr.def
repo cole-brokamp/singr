@@ -25,7 +25,8 @@ export R_VERSION=4.1
       libgit2-dev \
       cmake \
       curl \
-      wget
+      wget \
+      software-properties-common
 
 # configure default locale
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
@@ -57,6 +58,7 @@ export R_VERSION=4.1
     rm -rf h3c
 
 # install geospatial system deps
+    add-apt-repository ppa:ubuntugis/ubuntugis-unstable
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
       libgdal-dev \
       gdal-bin \

@@ -6,7 +6,10 @@ From: ubuntu:20.04
     R_VERSION 4.1
 
 %runscript
-exec R --quiet --no-save "${@}"
+/bin/bash
+
+%environment
+export R_VERSION=4.1
 
 %post
 export R_VERSION=4.1

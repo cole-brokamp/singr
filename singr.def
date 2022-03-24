@@ -3,16 +3,16 @@ From: ubuntu:20.04
 
 %labels
     Author cole.brokamp@gmail.com
-    R_VERSION 4.1
+    R_VERSION 4.1.3
 
 %runscript
 /bin/bash
 
 %environment
-export R_VERSION=4.1
+export R_VERSION=4.1.3
 
 %post
-export R_VERSION=4.1
+export R_VERSION=4.1.3
 
 # install some build dependencies and other essentials
     apt-get update

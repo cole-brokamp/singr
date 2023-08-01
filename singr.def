@@ -30,9 +30,11 @@ apt-get update -qq && \
     git \
     libcurl4-openssl-dev \
     locales \
+    libssl-dev \
     perl \
     sudo \
     tzdata \
+    software-properties-common \
     wget && \
     rm -rf /var/lib/apt/lists/*
 
@@ -55,20 +57,6 @@ wget https://cdn.posit.co/r/${OS_IDENTIFIER}/pkgs/r-${R_VERSION}_1_amd64.deb && 
       libgeos++-dev \
       libproj-dev \
       libudunits2-dev
-
-# install aws-cli
-    apt-get update
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
-        python3-pip \
-        python3-setuptools
-    pip3 install awscli --upgrade
-
-# V8 deps
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
-      libnode-dev \
-
-# clean up
-    rm -rf /var/lib/apt/lists/*
 
 %test
     R --version | grep -q "R version ${R_VERSION}"

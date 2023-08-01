@@ -1,19 +1,10 @@
 # singr
 
-A singularity image including:
+A singularity image for running R, including geospatial system dependencies gdal, geos, proj, and udunits2 (from ppa:ubuntugis/ubuntugis-unstable)
 
-- R
-- geospatial system deps gdal, geos, proj, and udunits2 (from ppa:ubuntugis/ubuntugis-unstable)
-- uber's h3 library
-- aws cli
-- V8
+The Singularity image tags correspond to version of R and `latest` refers to the most recently pushed image.
 
-Versions of R are specified using the singularity image tags and GitHub releases, where:
-
-- `4.0` refers to R Version `4.0.*` (e.g., 4.0.0 or 4.0.1, etc...)
-- `latest` refers to the most recently pushed image
-
-Note that different versions may use different base images for the Singularity container (e.g. `3.6` uses Ubuntu 18.04, but `4.0` uses Ubuntu 20.04).
+Note that different versions may use different base images for the Singularity container (e.g. `3.6` uses Ubuntu 18.04, `4.0` uses Ubuntu 20.04, `4.3` uses Ubuntu 22.04).
 
 ## using with an R package on the CCHMC HPC
 
@@ -26,7 +17,7 @@ Note that different versions may use different base images for the Singularity c
     - an advantage of this is that the project library compiled specifically for the container OS will be stored locally, meaning that the packages will be already installed the next time the container is used
     - sidenote: if you want to run the container without an `renv` project setup, just setup an empty project first by running `renv::init()` from R on the host
 - pull the the `.sif` file into your home folder (changing the tag number for a different version of R) with:
-    - `singularity pull library://cole-brokamp/default/singr:4.1.3`
+    - `singularity pull library://cole-brokamp/default/singr:4.3.0`
     - note that you can also use `latest` as the tag to get the most recent version
     - note that the name of the downloaded `.sif` file will be different depending on which tag was requested; we will use the file name `singr_latest.sif` assuming that the latest version was pulled from singularity hub
 - setup any system environment variables if needed (e.g., `AWS_SECRET_ACCESS_KEY`)

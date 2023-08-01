@@ -14,11 +14,15 @@ export R_VERSION=4.3.0
 %post
 export R_VERSION=4.3.0
 export OS_IDENTIFIER=ubuntu-2204
+
+# configure default locale
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export TZ=UTC
 
 # install some build dependencies and other essentials
-RUN apt-get update -qq && \
+apt-get update -qq && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
     apt-transport-https \
     curl \
@@ -31,12 +35,6 @@ RUN apt-get update -qq && \
     tzdata \
     wget && \
     rm -rf /var/lib/apt/lists/*
-
-# configure default locale
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
-    locale-gen en_US.utf8
-    /usr/sbin/update-locale LANG=en_US.UTF-8
-    export LC_ALL=en_US.UTF-8
 
 # install R
 wget https://cdn.posit.co/r/${OS_IDENTIFIER}/pkgs/r-${R_VERSION}_1_amd64.deb && \

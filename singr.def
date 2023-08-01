@@ -1,5 +1,5 @@
 BootStrap: docker
-From: ubuntu:22.04
+From: ubuntu:jammy
 
 %labels
     Author cole.brokamp@gmail.com
@@ -13,39 +13,40 @@ export R_VERSION=4.3.0
 
 %post
 export R_VERSION=4.3.0
+export OS_IDENTIFIER=ubuntu-2204
+export LANG=en_US.UTF-8
+export TZ=UTC
 
 # install some build dependencies and other essentials
-    apt-get update
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
-      locales \
-      gnupg \
-      build-essential \
-      gfortran \
-      git \
-      libgit2-dev \
-      cmake \
-      curl \
-      wget \
-      software-properties-common
+RUN apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    apt-transport-https \
+    curl \
+    fontconfig \
+    git \
+    libcurl4-openssl-dev \
+    locales \
+    perl \
+    sudo \
+    tzdata \
+    wget && \
+    rm -rf /var/lib/apt/lists/*
 
 # configure default locale
     echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
     locale-gen en_US.utf8
     /usr/sbin/update-locale LANG=en_US.UTF-8
     export LC_ALL=en_US.UTF-8
-    export LANG=en_US.UTF-8
 
 # install R
-    echo "deb http://cloud.r-project.org/bin/linux/ubuntu focal-cran40/" > /etc/apt/sources.list.d/r.list
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-    apt-get update
-    DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \
-      r-base=${R_VERSION}* \
-      libcurl4-openssl-dev \
-      libssl-dev \
-      libxml2-dev \
-      libcairo2-dev \
-      libxt-dev
+wget https://cdn.posit.co/r/${OS_IDENTIFIER}/pkgs/r-${R_VERSION}_1_amd64.deb && \
+    apt-get update -qq && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -f -y ./r-${R_VERSION}_1_amd64.deb && \
+    ln -s /opt/R/${R_VERSION}/bin/R /usr/bin/R && \
+    ln -s /opt/R/${R_VERSION}/bin/Rscript /usr/bin/Rscript && \
+    ln -s /opt/R/${R_VERSION}/lib/R /usr/lib/R && \
+    rm r-${R_VERSION}_1_amd64.deb && \
+    rm -rf /var/lib/apt/lists/*
 
 # install geospatial system deps
     add-apt-repository ppa:ubuntugis/ubuntugis-unstable

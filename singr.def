@@ -47,16 +47,6 @@ export R_VERSION=4.3.0
       libcairo2-dev \
       libxt-dev
 
-# install h3 library
-    git clone https://github.com/uber/h3.git h3c
-    cd h3c
-    git pull origin master --tags
-    git checkout "v3.3.0"
-    cmake -DENABLE_FORMAT=OFF -DBUILD_SHARED_LIBS=ON .
-    make install
-    cd ..
-    rm -rf h3c
-
 # install geospatial system deps
     add-apt-repository ppa:ubuntugis/ubuntugis-unstable
     DEBIAN_FRONTEND=noninteractive apt-get install -yqq --no-install-recommends \

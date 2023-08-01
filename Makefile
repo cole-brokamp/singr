@@ -1,10 +1,10 @@
 NAME=singr
-R_VERSION=4.1.3
+R_VERSION=4.3.0
 
 .PHONY: build push
 
 build:
-	singularity build $(NAME).sif $(NAME).def
+	singularity build --remote $(NAME).sif $(NAME).def
 
 push:
 	singularity push -U $(NAME).sif library://cole-brokamp/default/$(NAME):$(R_VERSION)
